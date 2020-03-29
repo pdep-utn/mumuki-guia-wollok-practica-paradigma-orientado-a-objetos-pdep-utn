@@ -1,0 +1,48 @@
+test "Olivia inicialmente tiene 4 de grado de concentracion" {
+	assert.equals(4, olivia.gradoDeConcentracion())
+}
+
+test "Olivia recibe masajes pocas veces y su grado de concentracion aumenta un poco" {
+	olivia.recibirMasajes()
+	assert.equals(6, olivia.gradoDeConcentracion())	
+}
+
+test "Olivia recibe masajes muchas veces y su grado de concentracion aumenta bastante más al estar relajada" {
+	4.times {n=> olivia.recibirMasajes()}
+	assert.equals(18, olivia.gradoDeConcentracion())	
+}
+
+test "Inicialmente Olivia no es feliz" {
+	assert.notThat(olivia.esFeliz())
+}
+
+test "Luego de 2 masajes Olivia es feliz" {
+	2.times {n=> olivia.recibirMasajes()}
+	assert.that(olivia.esFeliz())
+}
+
+test "Si Olivia discute con concentración baja, su concentración se mantiene igual" {
+	olivia.discutir()
+	assert.equals(4, olivia.gradoDeConcentracion())
+}
+
+test "Si Olivia se da un masaje y luego discute, su concentración queda en 5" {
+	olivia.recibirMasajes()
+	olivia.discutir()
+	assert.equals(5, olivia.gradoDeConcentracion())
+}
+
+test "Si Olivia se da un baño de vapor, aumenta su concentración" {
+	olivia.darseUnBanioDeVapor()
+	assert.equals(5, olivia.gradoDeConcentracion())
+}
+
+test "Luego de que el spa atienda a Olivia, ella está feliz"{
+	spa.atender(olivia)
+	assert.that(olivia.esFeliz())
+}
+
+test "Si Olivia se atiende varias veces en el spa, su concentración aumenta mucho" {
+  3.times {n => spa.atender(olivia) }
+	assert.equals(16, olivia.gradoDeConcentracion())
+}

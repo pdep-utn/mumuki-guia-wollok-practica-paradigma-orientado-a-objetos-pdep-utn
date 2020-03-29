@@ -1,0 +1,51 @@
+describe "Punto 2" {
+	const contactoIncluido = new Usuario()
+	const contactoExcluido = new Usuario()
+
+	const fechaPosteriorPublicacion = publicacionPrivada.fechaPublicacion().plusDays(10)
+	const creadorPublicacion = publicacionPrivada.creador()
+	
+	const creadorHistoria = historiaPublica.creador()
+	const ultimoDiaVisibleParaHistoria = historiaPublica.fechaPublicacion().plusDays(1)
+	
+	const publicacionConListaBlanca = publicacionPrivada
+	const historiaConListaBlanca = historiaPublica
+	
+	fixture {
+		[publicacionConListaBlanca, historiaConListaBlanca].forEach {publicacion =>
+			publicacion.creador().agregarContacto(contactoIncluido)
+			publicacion.creador().agregarContacto(contactoExcluido)
+			publicacion.conListaBlanca([contactoIncluido])
+		}
+	}
+	
+	test "Una publicación con lista blanca puede ser vista por un contacto incluído en dicha lista en cualquier fecha" {
+		assert.that(publicacionConListaBlanca.puedeVerla(contactoIncluido, fechaPosteriorPublicacion))
+	}
+	test "Una historia con lista blanca puede ser vista por un contacto incluído en dicha lista hasta un día después de su publicación" {
+		assert.that(historiaConListaBlanca.puedeVerla(contactoIncluido, ultimoDiaVisibleParaHistoria))
+	}
+	test "Una historia con lista blanca NO puede ser vista por un contacto incluído en dicha lista pasado más de un día después de su publicación" {
+		assert.notThat(historiaConListaBlanca.puedeVerla(contactoIncluido, ultimoDiaVisibleParaHistoria.plusDays(1)))
+	}
+	test "Una publicación con lista blanca NO puede ser vista por un contacto excluído en dicha lista" {
+		assert.notThat(publicacionConListaBlanca.puedeVerla(contactoExcluido, fechaPosteriorPublicacion))
+	}
+	test "Una historia con lista blanca NO puede ser vista por un contacto excluído en dicha lista" {
+		assert.notThat(historiaConListaBlanca.puedeVerla(contactoExcluido, ultimoDiaVisibleParaHistoria))
+	}
+	test "Una publicación con lista blanca NO puede ser vista por alguien incluído en dicha lista que no es un contacto" {
+		creadorPublicacion.eliminarContacto(contactoIncluido)
+		assert.notThat(publicacionConListaBlanca.puedeVerla(contactoIncluido, fechaPosteriorPublicacion))
+	}
+	test "Una historia con lista blanca NO puede ser vista por alguien incluído en dicha lista que no es un contacto" {
+		creadorHistoria.eliminarContacto(contactoIncluido)
+		assert.notThat(historiaConListaBlanca.puedeVerla(contactoIncluido, ultimoDiaVisibleParaHistoria))
+	}
+	test "Una publicación con lista blanca puede ser vista por su creador" {
+		assert.that(publicacionConListaBlanca.puedeVerla(creadorPublicacion, fechaPosteriorPublicacion))
+	}
+	test "Una historia con lista blanca puede ser vista por su creador en cualquier fecha" {
+		assert.that(historiaConListaBlanca.puedeVerla(creadorHistoria, ultimoDiaVisibleParaHistoria.plusDays(7)))
+	}
+}

@@ -1,0 +1,1 @@
+Si necesitás refrescar qué mensajes de colecciones existen y cómo se usan podés tomar de referencia [la documentación oficial de Wollok](https://www.wollok.org/documentacion/wollokdoc/). Vas a encontrar esta información dentro de la sección `lang.wlk`.

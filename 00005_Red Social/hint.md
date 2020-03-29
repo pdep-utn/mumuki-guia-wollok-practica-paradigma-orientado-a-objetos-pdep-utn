@@ -1,0 +1,1 @@
+Para saber la diferencia en días entre dos fechas se pueden restar entre ellas con el operador `-`. Para más información podés revisar la [documentación oficial](https://www.wollok.org/documentacion/wollokdoc/).

@@ -1,0 +1,74 @@
+describe "Punto 1" {
+	const contactoCreador = new Usuario()
+	const desconocido = new Usuario()
+	
+	const fechaPosteriorPublicacion = publicacionPrivada.fechaPublicacion().plusDays(10)
+	const creadorPublicacion = publicacionPrivada.creador()
+	
+	const creadorHistoria = historiaPublica.creador()
+	const ultimoDiaVisibleParaHistoria = historiaPublica.fechaPublicacion().plusDays(1)
+	
+	fixture {
+		creadorHistoria.agregarContacto(contactoCreador)
+		creadorPublicacion.agregarContacto(contactoCreador)
+	}
+	
+	test "Una publicacion pública la puede ver quien la publicó en cualquier fecha" {
+		publicacionPrivada.volverPublica()
+		assert.that(publicacionPrivada.puedeVerla(creadorPublicacion, fechaPosteriorPublicacion))
+	}
+	test "Una publicacion privada la puede ver quien la publicó en cualquier fecha" {
+		assert.that(publicacionPrivada.puedeVerla(creadorPublicacion, fechaPosteriorPublicacion))
+	}
+	test "Una publicacion pública la puede ver un contacto de quien la publicó en cualquier fecha" {
+		publicacionPrivada.volverPublica()
+		assert.that(publicacionPrivada.puedeVerla(contactoCreador, fechaPosteriorPublicacion))
+	}
+	test "Una publicacion privada la puede ver un contacto de quien la publicó en cualquier fecha" {
+		assert.that(publicacionPrivada.puedeVerla(contactoCreador, fechaPosteriorPublicacion))
+	}
+	test "Una publicacion pública la puede ver un desconocido de quien la publicó en cualquier fecha" {
+		publicacionPrivada.volverPublica()
+		assert.that(publicacionPrivada.puedeVerla(desconocido, fechaPosteriorPublicacion))
+	}
+	test "Una publicacion privada NO la puede ver un desconocido de quien la publicó" {
+		assert.notThat(publicacionPrivada.puedeVerla(desconocido, fechaPosteriorPublicacion))
+	}
+	
+	test "Una historia pública la puede ver quien la publicó en cualquier fecha" {
+		assert.that(historiaPublica.puedeVerla(creadorHistoria, ultimoDiaVisibleParaHistoria.plusDays(10)))
+	}
+	
+	test "Una historia privada la puede ver quien la publicó en cualquier fecha" {
+		historiaPublica.volverPrivada()
+		assert.that(historiaPublica.puedeVerla(creadorHistoria, ultimoDiaVisibleParaHistoria.plusDays(10)))
+	}
+	
+	test "Una historia pública la puede ver un contacto de quien la publicó hasta un día después de su publicación" {
+		assert.that(historiaPublica.puedeVerla(contactoCreador, ultimoDiaVisibleParaHistoria))
+	}
+	test "Una historia pública NO la puede ver un contacto de quien la publicó pasado más de un día después de su publicación" {
+		assert.notThat(historiaPublica.puedeVerla(contactoCreador, ultimoDiaVisibleParaHistoria.plusDays(1)))
+	}
+	
+	test "Una historia privada la puede ver un contacto de quien la publicó hasta un día después de su publicación" {
+		historiaPublica.volverPrivada()
+		assert.that(historiaPublica.puedeVerla(contactoCreador, ultimoDiaVisibleParaHistoria))
+	}
+	test "Una historia privada NO la puede ver un contacto de quien la publicó pasado más de un día después de su publicación" {
+		historiaPublica.volverPrivada()
+		assert.notThat(historiaPublica.puedeVerla(contactoCreador, ultimoDiaVisibleParaHistoria.plusDays(1)))
+	}
+	
+	test "Una historia pública la puede ver un desconocido de quien la publicó hasta un día después de su publicación" {
+		assert.that(historiaPublica.puedeVerla(desconocido, ultimoDiaVisibleParaHistoria))
+	}
+	test "Una historia pública NO la puede ver un desconocido de quien la publicó pasado más de un día después de su publicación" {
+		assert.notThat(historiaPublica.puedeVerla(desconocido, ultimoDiaVisibleParaHistoria.plusDays(1)))
+	}
+	
+	test "Una historia privada NO la puede ver un desconocido de quien la publicó, incluso si es reciente" {
+		historiaPublica.volverPrivada()
+		assert.notThat(historiaPublica.puedeVerla(desconocido, ultimoDiaVisibleParaHistoria))
+	}
+}

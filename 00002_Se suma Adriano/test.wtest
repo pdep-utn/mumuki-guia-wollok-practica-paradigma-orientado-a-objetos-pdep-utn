@@ -1,0 +1,42 @@
+
+test "Frescura para programar inicial de Adriano" {
+	assert.that(adriano.frescoParaProgramar())
+}
+
+test "El nivel de contractura inicial de Adriano es 5" {
+	assert.equals(5, adriano.nivelDeContractura())
+}
+
+
+test "Adriano tiene un día de trabajo y cambia su estado para programar" {
+	adriano.trabajarUnDia()
+	assert.notThat(adriano.frescoParaProgramar())
+}
+
+test "Adriano tiene un día de trabajo y se contractura" {
+	adriano.trabajarUnDia()
+	assert.equals(7, adriano.nivelDeContractura())
+}
+
+test "Adriano trabaja dos días seguidos y se contractura mucho" {
+	adriano.trabajarUnDia()
+	adriano.trabajarUnDia()
+	assert.equals(11, adriano.nivelDeContractura())
+}
+
+test "Luego de que el spa atienda a Adriano, su nivel de contractura baja" {
+	spa.atender(adriano)
+	assert.equals(3, adriano.nivelDeContractura())
+}
+
+test "Luego de que el spa atienda a Adriano 3 veces, su nivel de contractura queda en 0" {
+	spa.atender(adriano)
+	spa.atender(adriano)
+	spa.atender(adriano)
+	assert.equals(0, adriano.nivelDeContractura())
+}
+
+test "Luego de que el spa atienda a Adriano, está fresco para programar" {
+	spa.atender(adriano)
+	assert.that(adriano.frescoParaProgramar())
+}
